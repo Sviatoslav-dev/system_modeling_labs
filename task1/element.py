@@ -18,6 +18,9 @@ class Element:
         self.next_elements = None
         self.name = name
 
+        self.probabilities = None
+        self.blocked = None
+
     def in_act(self, t_curr):
         pass
 
@@ -38,10 +41,19 @@ class Element:
     def do_statistics(self, delta):
         pass
 
-    def set_next_elements(self, next_elements):
+    def set_next_elements(self, next_elements, probabilities=None, blocked=None):
         self.next_elements = next_elements
+        self.probabilities = probabilities
+        self.blocked = blocked
 
     def get_next(self):
+        if self.probabilities:
+            n = random.random()
+            r = 0
+            for i, p in enumerate(self.probabilities):
+                r += p
+                if n < r:
+                    return self.next_elements[i]
         return random.choice(self.next_elements)
 
     def get_delay(self):
