@@ -7,7 +7,7 @@ class ElementCreate(Element):
         delay = self.get_delay()
         self.total_work_time += delay
         self.t_state = t_curr + delay
-        self.get_next().in_act(t_curr)
+        self.get_next().in_act(t_curr, t_curr)
 
     def doStatistics(self, delta):
-        self.mean_queue = self.mean_queue + self.queue * delta
+        self.mean_queue = self.mean_queue + len(self.queue) * delta

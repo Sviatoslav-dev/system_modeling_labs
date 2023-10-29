@@ -8,7 +8,19 @@ class ElementProcess(Element):
         self.worker_states = [0 for _ in range(count_of_workers)]
         self.workers_t_next = [float("inf") for _ in range(count_of_workers)]
 
+        self.last_in_lab = None
+        self.total_lab_interval = 0
+        self.total_in_lab = 0
+
     def in_act(self, t_curr, obj=1):
+        if self.name == "Laboratory":
+            if self.last_in_lab is None:
+                self.last_in_lab = t_curr
+            else:
+                self.total_in_lab += 1
+                self.total_lab_interval = t_curr - self.last_in_lab
+                self.last_in_lab = t_curr
+
         try:
             worker = self.worker_states.index(0)
         except ValueError:
@@ -53,7 +65,7 @@ class ElementProcess(Element):
             next_element = self.get_next(processed_obj[0])
             if next_element is not None:
                 if self.name == "Road from laboratory":
-                    processed_obj = (processed_obj[0], processed_obj[1], True)
+                    processed_obj = (1, processed_obj[1], True)
                 next_element.in_act(t_curr, processed_obj)
             else:
                 return (processed_obj[1], t_curr)

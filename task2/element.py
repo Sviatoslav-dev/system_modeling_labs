@@ -11,7 +11,7 @@ class Element:
         self.total_work_time = 0
 
         self.state = 0
-        self.queue = 0
+        self.queue = []
         self.max_queue = max_queue
         self.failure = 0
         self.served = 0
@@ -25,7 +25,7 @@ class Element:
         self.blocked = None
         self.priorities = None
 
-    def in_act(self, t_curr):
+    def in_act(self, t_curr, start_time):
         pass
 
     def out_act(self, t_curr):
@@ -33,7 +33,7 @@ class Element:
 
     def print_info(self):
         print(
-            f"Element = {self.name} t_next = {self.t_state} queue: {self.queue} state = {self.state}"
+            f"Element = {self.name} t_next = {self.t_state} queue: {len(self.queue)} state = {self.state}"
         )
 
     def print_statistic(self, time_modeling):
@@ -65,7 +65,7 @@ class Element:
 
                     if best.is_blocked:
                         return best
-                elif next_elements[max_priority_index].queue < best.queue:
+                elif len(next_elements[max_priority_index].queue) < len(best.queue):
                     best = next_elements[max_priority_index]
 
                 del priorities[max_priority_index]

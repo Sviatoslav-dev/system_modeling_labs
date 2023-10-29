@@ -33,15 +33,6 @@ class Model:
         self.print_result(time_modeling)
         print("MEAN PATIENTS TIME = ", self.patients_duration_sum / self.patients_count)
 
-    # def change_queue(self):
-    #     if self.elements[1].queue - self.elements[2].queue >= 2:
-    #         self.elements[1].queue -= 1
-    #         self.elements[2].queue += 1
-    #
-    #     if self.elements[2].queue - self.elements[1].queue >= 2:
-    #         self.elements[2].queue -= 1
-    #         self.elements[1].queue += 1
-
     def print_info(self):
         for element in self.elements:
             if element.state == 1:
@@ -55,4 +46,8 @@ class Model:
                 print("mean length of queue = ", e.mean_queue / self.t_curr)
                 # print("failure probability = ", e.failure / (e.served + e.failure))
                 print("load time = ", e.total_work_time / time_modeling)
+
+                if e.name == "Laboratory":
+                    print("MEAN INTERVAL TO LABORATORY: ",
+                          e.total_lab_interval / e.total_in_lab)
             print()
