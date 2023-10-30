@@ -4,7 +4,7 @@ import numpy as np
 
 
 class Element:
-    def __init__(self, delay, name, max_queue=0, type_depends_delay=False):
+    def __init__(self, delay, name, max_queue=0, type_depends_delay=False, distribution=None):
         self.mean_queue = 0
         self.t_state = 0
         self.delay = delay
@@ -29,6 +29,7 @@ class Element:
         self.type_delays = {
             1: self.delay,
         }
+        self.distribution = distribution if distribution is not None else np.random.exponential
 
     def in_act(self, t_curr):
         pass
@@ -90,5 +91,5 @@ class Element:
 
     def get_delay(self, patient_type=1):
         if self.type_depends_delay:
-            return np.random.exponential(self.type_delays[patient_type])
-        return np.random.exponential(self.delay)
+            return self.distribution(self.type_delays[patient_type])
+        return self.distribution(self.delay)
