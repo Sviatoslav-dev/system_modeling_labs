@@ -56,9 +56,9 @@ class Element:
         self.blocked = blocked
         self.priorities = priorities
 
-    def get_next(self, obj=1):
+    def get_next(self, patient_type=1):
         if isinstance(self.next_elements, dict):
-            return self.next_elements[obj]
+            return self.next_elements[patient_type]
 
         if self.priorities:
             priorities = copy.copy(self.priorities)
@@ -88,7 +88,7 @@ class Element:
                     return self.next_elements[i]
         return random.choice(self.next_elements)
 
-    def get_delay(self, obj=1):
+    def get_delay(self, patient_type=1):
         if self.type_depends_delay:
-            return np.random.exponential(self.type_delays[obj])
+            return np.random.exponential(self.type_delays[patient_type])
         return np.random.exponential(self.delay)

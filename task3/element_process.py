@@ -1,4 +1,5 @@
 from element import Element
+from task3.Patient import Patient
 
 
 class ElementProcess(Element):
@@ -12,7 +13,7 @@ class ElementProcess(Element):
         self.total_lab_interval = 0
         self.total_in_lab = 0
 
-    def in_act(self, t_curr, obj=1):
+    def in_act(self, t_curr, patient=1):
         if self.name == "Laboratory":
             if self.last_in_lab is None:
                 self.last_in_lab = t_curr
@@ -27,8 +28,8 @@ class ElementProcess(Element):
             worker = None
 
         if worker is not None:
-            self.worker_states[worker] = obj
-            delay = self.get_delay(obj[0])
+            self.worker_states[worker] = patient
+            delay = self.get_delay(patient.type)
             self.workers_t_next[worker] = t_curr + delay
             self.t_state = min(self.workers_t_next)
             if 0 not in self.worker_states:
@@ -36,10 +37,10 @@ class ElementProcess(Element):
         else:
             if len(self.queue) < self.max_queue:
                 # self.queue.append(obj)
-                if self.name == "Doctors on duty" and obj[2]:
-                    self.queue.insert(0, obj)
+                if self.name == "Doctors on duty" and patient.was_in_lab:
+                    self.queue.insert(0, patient)
                 else:
-                    self.queue.append(obj)
+                    self.queue.append(patient)
             else:
                 self.failure += 1
 
@@ -47,14 +48,14 @@ class ElementProcess(Element):
         super().out_act(t_curr)
         worker_index = self.workers_t_next.index(t_curr)
         print("PROCESSED: ", self.worker_states[worker_index])
-        processed_obj = self.worker_states[worker_index]
+        processed_patient = self.worker_states[worker_index]
         self.worker_states[worker_index] = 0
         self.workers_t_next[worker_index] = float("inf")
         self.t_state = min(self.workers_t_next)
         if len(self.queue) > 0:
-            obj = self.queue.pop(0)
-            self.worker_states[worker_index] = obj
-            delay = self.get_delay(obj[0])
+            patient = self.queue.pop(0)
+            self.worker_states[worker_index] = patient
+            delay = self.get_delay(patient.type)
             self.total_work_time += delay
             self.workers_t_next[worker_index] = t_curr + delay
             self.t_state = min(self.workers_t_next)
@@ -62,15 +63,15 @@ class ElementProcess(Element):
             if 0 in self.worker_states:
                 self.is_blocked = False
         if self.next_elements is not None:
-            next_element = self.get_next(processed_obj[0])
+            next_element = self.get_next(processed_patient.type)
             if next_element is not None:
                 if self.name == "Road from laboratory":
-                    processed_obj = (1, processed_obj[1], True)
-                next_element.in_act(t_curr, processed_obj)
+                    processed_patient = Patient(1, processed_patient.arrival_time, True)
+                next_element.in_act(t_curr, processed_patient)
             else:
-                return (processed_obj[1], t_curr)
+                return processed_patient.arrival_time, t_curr
         else:
-            return (processed_obj[1], t_curr)
+            return processed_patient.arrival_time, t_curr
 
     def do_statistics(self, delta):
         self.mean_queue += len(self.queue) * delta

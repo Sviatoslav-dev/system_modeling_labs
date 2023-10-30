@@ -71,7 +71,7 @@ class Model:
                 total_served += e.served
             print()
         print()
-        print(f"MEAN CLIENTS = {mean_clients}")
+        print(f"mean count of clients in bank = {mean_clients}")
         print(f"MEAN DEPARTURE TIME = {self.total_departure_interval / self.total_departured}")
-        print(f"MEAN IN SYSTEM = {total_time_in_system / total_served}")
-        print(f"TOTAL QUEUE CHANGE = {self.total_queue_change}")
+        print(f"mean client time in bank = {total_time_in_system / total_served}")
+        print(f"count of queue change = {self.total_queue_change}")

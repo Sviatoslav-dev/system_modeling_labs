@@ -31,7 +31,7 @@ class Model:
                         self.patients_duration_sum += patient_times[1] - patient_times[0]
             self.print_info()
         self.print_result(time_modeling)
-        print("MEAN PATIENTS TIME = ", self.patients_duration_sum / self.patients_count)
+        print("patients in hospital mean time = ", self.patients_duration_sum / self.patients_count)
 
     def print_info(self):
         for element in self.elements:
@@ -50,4 +50,6 @@ class Model:
                 if e.name == "Laboratory":
                     print("MEAN INTERVAL TO LABORATORY: ",
                           e.total_lab_interval / e.total_in_lab)
+                    print(e.total_lab_interval)
+                    print(e.total_in_lab)
             print()
