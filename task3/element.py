@@ -92,4 +92,7 @@ class Element:
     def get_delay(self, patient_type=1):
         if self.type_depends_delay:
             return self.distribution(self.type_delays[patient_type])
-        return self.distribution(self.delay)
+        if isinstance(self.delay, tuple):
+            return self.distribution(*self.delay)
+        else:
+            return self.distribution(self.delay)

@@ -1,3 +1,7 @@
+import random
+
+import numpy as np
+
 from element_create import ElementCreate
 from element_process import ElementProcess
 from model import Model
@@ -10,21 +14,21 @@ doctors_on_duty.type_delays = {
     2: 40,
     3: 30,
 }
-accompanying_to_chamber = ElementProcess(delay=5, name="Accompanying to chamber",
-                                         max_queue=100, count_of_workers=3)
+accompanying_to_chamber = ElementProcess(delay=(3, 8), name="Accompanying to chamber",
+                                         max_queue=100, count_of_workers=3, distribution=random.uniform)
 
-road_to_lab = ElementProcess(delay=3, name="Road to laboratory",
-                             max_queue=100, count_of_workers=100)
+road_to_lab = ElementProcess(delay=(2, 5), name="Road to laboratory",
+                             max_queue=100, count_of_workers=100, distribution=random.uniform)
 
-lab_registration = ElementProcess(delay=4.5, name="Registration to laboratory",
-                                  max_queue=100, count_of_workers=1)
+lab_registration = ElementProcess(delay=(3, 4.5), name="Registration to laboratory",
+                                  max_queue=100, count_of_workers=1, distribution=np.random.gamma)
 
-lab = ElementProcess(delay=4, name="Laboratory",
-                     max_queue=100, count_of_workers=2)
+lab = ElementProcess(delay=(2, 4), name="Laboratory",
+                     max_queue=100, count_of_workers=2, distribution=np.random.gamma)
 
 
-road_from_lab = ElementProcess(delay=3, name="Road from laboratory",
-                               max_queue=100, count_of_workers=100)
+road_from_lab = ElementProcess(delay=(2, 5), name="Road from laboratory",
+                               max_queue=100, count_of_workers=100, distribution=random.uniform)
 
 create.set_next_elements([doctors_on_duty])
 doctors_on_duty.set_next_elements({

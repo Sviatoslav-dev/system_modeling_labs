@@ -4,7 +4,7 @@ import numpy as np
 
 
 class Element:
-    def __init__(self, delay, name, max_queue=0):
+    def __init__(self, delay, name, max_queue=0, distribution=None):
         self.mean_queue = 0
         self.t_state = 0
         self.delay = delay
@@ -24,6 +24,8 @@ class Element:
         self.probabilities = None
         self.blocked = None
         self.priorities = None
+
+        self.distribution = distribution if distribution is not None else np.random.exponential
 
     def in_act(self, t_curr, start_time):
         pass
@@ -81,4 +83,7 @@ class Element:
         return random.choice(self.next_elements)
 
     def get_delay(self):
-        return np.random.exponential(self.delay)
+        if isinstance(self.delay, tuple):
+            return self.distribution(*self.delay)
+        else:
+            return self.distribution(self.delay)

@@ -3,8 +3,9 @@ from task3.Patient import Patient
 
 
 class ElementProcess(Element):
-    def __init__(self, delay, name, max_queue, count_of_workers=1, type_depends_delay=False):
-        super().__init__(delay, name, max_queue, type_depends_delay)
+    def __init__(self, delay, name, max_queue, count_of_workers=1,
+                 type_depends_delay=False, distribution=None):
+        super().__init__(delay, name, max_queue, type_depends_delay, distribution=distribution)
         self.t_state = float("inf")
         self.worker_states = [0 for _ in range(count_of_workers)]
         self.workers_t_next = [float("inf") for _ in range(count_of_workers)]
